@@ -521,6 +521,43 @@
       opacity: 1;
     }
 
+    /* ZELLE & VENMO QR DISPLAY BOX IN TIP MODAL */
+    .zelle-qr-display-box {
+      background: #ffffff;
+      padding: 12px;
+      border-radius: 12px;
+      border: 2px dashed #7414ca;
+      display: inline-block;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 12px rgba(116, 20, 202, 0.08);
+    }
+
+    .zelle-qr-display-box img {
+      width: 160px;
+      height: 160px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .venmo-qr-display-box {
+      background: #ffffff;
+      padding: 12px;
+      border-radius: 12px;
+      border: 2px dashed #008CFF;
+      display: inline-block;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 140, 255, 0.08);
+    }
+
+    .venmo-qr-display-box img {
+      width: 160px;
+      height: 160px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+
     /* MODAL POPUP FOR TIP SELECTION */
     .modal-overlay {
       position: fixed;
@@ -552,6 +589,8 @@
       transform: translateY(20px);
       transition: var(--transition);
       box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      max-height: 90vh;
+      overflow-y: auto;
     }
 
     .modal-overlay.active .modal-card {
@@ -641,7 +680,7 @@
     }
 
     .pay-value {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: var(--accent);
       margin-bottom: 0.8rem;
@@ -790,8 +829,8 @@
             <tr>
               <th>Technician</th>
               <th>Specialty</th>
-              <th>Zelle Phone / Email</th>
-              <th>Venmo Username</th>
+              <th>Zelle Info / QR</th>
+              <th>Venmo Username / QR</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -873,17 +912,23 @@
         </button>
       </div>
 
-      <!-- Zelle View -->
+      <!-- Zelle View with QR Image option -->
       <div id="payViewZelle">
-        <div class="payment-details-box">
-          <div class="pay-label">Zelle Phone / Email</div>
-          <div class="pay-value" id="dispZelleId">---</div>
-          <button class="btn-copy" onclick="copyToClipboard(currentSelectedTech.zelle, 'Zelle ID Copied!')">
-            <i class="fa-regular fa-copy"></i> Copy Zelle Info
-          </button>
-        </div>
-
         <div style="text-align: center;">
+          <!-- Zelle Personal QR Code Container -->
+          <div id="boxZelleQr" class="zelle-qr-display-box" style="display: none;">
+            <p style="font-size: 0.75rem; font-weight: 700; color: #7414ca; margin-bottom: 6px;">SCAN ZELLE QR CODE</p>
+            <img id="imgZelleQr" src="" alt="Zelle QR Code">
+          </div>
+
+          <div class="payment-details-box">
+            <div class="pay-label">Zelle Phone / Email</div>
+            <div class="pay-value" id="dispZelleId">---</div>
+            <button class="btn-copy" onclick="copyToClipboard(currentSelectedTech.zelle, 'Zelle ID Copied!')">
+              <i class="fa-regular fa-copy"></i> Copy Zelle Info
+            </button>
+          </div>
+
           <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">Suggested Tip Amounts:</p>
           <div class="tip-presets">
             <span class="tip-chip">$5</span>
@@ -892,29 +937,35 @@
             <span class="tip-chip">$20</span>
           </div>
           <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.8rem;">
-            Open your banking app (Chase, BoA, Wells Fargo, etc.) and paste the number into Zelle.
+            Scan QR code with your Bank App or copy Zelle number to tip.
           </p>
         </div>
       </div>
 
-      <!-- Venmo View -->
+      <!-- Venmo View with QR Image option -->
       <div id="payViewVenmo" style="display: none;">
-        <div class="payment-details-box">
-          <div class="pay-label">Venmo Username</div>
-          <div class="pay-value" id="dispVenmoId">---</div>
-          <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
-            <button class="btn-copy" onclick="copyToClipboard(currentSelectedTech.venmo, 'Venmo Username Copied!')">
-              <i class="fa-regular fa-copy"></i> Copy Handle
-            </button>
-            <a href="#" id="linkVenmoApp" target="_blank" class="btn-venmo-link">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Venmo
-            </a>
-          </div>
-        </div>
-
         <div style="text-align: center;">
+          <!-- Venmo Personal QR Code Container -->
+          <div id="boxVenmoQr" class="venmo-qr-display-box" style="display: none;">
+            <p style="font-size: 0.75rem; font-weight: 700; color: #008CFF; margin-bottom: 6px;">SCAN VENMO QR CODE</p>
+            <img id="imgVenmoQr" src="" alt="Venmo QR Code">
+          </div>
+
+          <div class="payment-details-box">
+            <div class="pay-label">Venmo Username</div>
+            <div class="pay-value" id="dispVenmoId">---</div>
+            <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+              <button class="btn-copy" onclick="copyToClipboard(currentSelectedTech.venmo, 'Venmo Username Copied!')">
+                <i class="fa-regular fa-copy"></i> Copy Handle
+              </button>
+              <a href="#" id="linkVenmoApp" target="_blank" class="btn-venmo-link">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Venmo
+              </a>
+            </div>
+          </div>
+
           <p style="font-size: 0.75rem; color: var(--text-muted);">
-            Tap "Open Venmo" to launch the Venmo app directly on your phone.
+            Scan QR code with Venmo app or tap "Open Venmo" directly on your phone.
           </p>
         </div>
       </div>
@@ -940,7 +991,7 @@
               <span>Change</span>
             </div>
           </div>
-          <input type="file" id="fileAvatarInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+          <input type="file" id="fileAvatarInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event, 'avatar')">
           <input type="hidden" id="staffAvatar" value="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150">
           <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">Tap circle to upload photo from device</p>
         </div>
@@ -960,9 +1011,35 @@
           <input type="text" id="staffZelle" required placeholder="555-123-4567 or email@domain.com">
         </div>
 
+        <!-- Zelle QR Code Image Uploader -->
+        <div class="form-group" style="background: #f8f3fc; padding: 12px; border-radius: 8px; border: 1px dashed #7414ca;">
+          <label style="color: #7414ca;">Zelle Personal QR Code (Optional)</label>
+          <div style="display: flex; align-items: center; gap: 10px; margin-top: 6px;">
+            <button type="button" class="btn-secondary" style="font-size: 0.8rem; padding: 6px 12px;" onclick="document.getElementById('fileZelleQrInput').click()">
+              <i class="fa-solid fa-qrcode"></i> Upload Zelle QR Image
+            </button>
+            <span id="txtZelleQrStatus" style="font-size: 0.75rem; color: var(--text-muted);">No QR uploaded</span>
+          </div>
+          <input type="file" id="fileZelleQrInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event, 'zelleQr')">
+          <input type="hidden" id="staffZelleQr" value="">
+        </div>
+
         <div class="form-group">
           <label>Venmo Username (without @)</label>
           <input type="text" id="staffVenmo" placeholder="e.g. Sarah-Jenkins-Nails">
+        </div>
+
+        <!-- Venmo QR Code Image Uploader -->
+        <div class="form-group" style="background: #e6f4ff; padding: 12px; border-radius: 8px; border: 1px dashed #008CFF;">
+          <label style="color: #008CFF;">Venmo Personal QR Code (Optional)</label>
+          <div style="display: flex; align-items: center; gap: 10px; margin-top: 6px;">
+            <button type="button" class="btn-secondary" style="font-size: 0.8rem; padding: 6px 12px;" onclick="document.getElementById('fileVenmoQrInput').click()">
+              <i class="fa-solid fa-qrcode"></i> Upload Venmo QR Image
+            </button>
+            <span id="txtVenmoQrStatus" style="font-size: 0.75rem; color: var(--text-muted);">No QR uploaded</span>
+          </div>
+          <input type="file" id="fileVenmoQrInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event, 'venmoQr')">
+          <input type="hidden" id="staffVenmoQr" value="">
         </div>
 
         <button type="submit" class="btn-add" style="width: 100%; justify-content: center; margin-top: 1rem;">
@@ -999,7 +1076,9 @@
         name: 'Jessica Tran',
         role: 'Master Nail Artist',
         zelle: '555-234-5678',
+        zelleQr: '',
         venmo: 'JessicaTranNails',
+        venmoQr: '',
         avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
       },
       {
@@ -1007,7 +1086,9 @@
         name: 'Chloe Nguyen',
         role: 'Pedicure & Spa Specialist',
         zelle: 'chloe.nguyen@example.com',
+        zelleQr: '',
         venmo: 'Chloe-Nguyen-Tips',
+        venmoQr: '',
         avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80'
       },
       {
@@ -1015,7 +1096,9 @@
         name: 'David Le',
         role: 'Acrylic & Extension Specialist',
         zelle: '555-876-5432',
+        zelleQr: '',
         venmo: 'DavidLeNails',
+        venmoQr: '',
         avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'
       }
     ];
@@ -1037,7 +1120,7 @@
         } else {
           const initialObj = {};
           defaultTechnicians.forEach(t => {
-            initialObj[t.id] = { name: t.name, role: t.role, zelle: t.zelle, venmo: t.venmo, avatar: t.avatar };
+            initialObj[t.id] = { name: t.name, role: t.role, zelle: t.zelle, zelleQr: t.zelleQr || '', venmo: t.venmo, venmoQr: t.venmoQr || '', avatar: t.avatar };
           });
           db.ref('technicians').set(initialObj);
           technicians = defaultTechnicians;
@@ -1094,8 +1177,14 @@
             </div>
           </td>
           <td>${tech.role || '-'}</td>
-          <td><code style="background: #f0ebe1; padding: 4px 8px; border-radius: 4px;">${tech.zelle}</code></td>
-          <td>${tech.venmo ? `@${tech.venmo}` : '-'}</td>
+          <td>
+            <div><code style="background: #f0ebe1; padding: 2px 6px; border-radius: 4px;">${tech.zelle}</code></div>
+            ${tech.zelleQr ? '<span style="font-size: 0.7rem; color: #7414ca; font-weight:600;"><i class="fa-solid fa-qrcode"></i> Has Zelle QR</span>' : ''}
+          </td>
+          <td>
+            <div>${tech.venmo ? `@${tech.venmo}` : '-'}</div>
+            ${tech.venmoQr ? '<span style="font-size: 0.7rem; color: #008CFF; font-weight:600;"><i class="fa-solid fa-qrcode"></i> Has Venmo QR</span>' : ''}
+          </td>
           <td>
             <div class="action-btns">
               <button class="icon-btn edit" onclick="editStaff('${tech.id}')"><i class="fa-solid fa-pen"></i></button>
@@ -1106,19 +1195,29 @@
       `).join('');
     }
 
-    // Handle Image Upload from Device (Facebook-style)
-    function handleImageUpload(event) {
+    // Handle Image Uploads from Device (Avatar, Zelle QR, or Venmo QR)
+    function handleImageUpload(event, type) {
       const file = event.target.files[0];
       if (!file) return;
 
       const reader = new FileReader();
       reader.onload = function(e) {
         const base64Image = e.target.result;
-        // Cập nhật hiển thị ảnh preview trong form
-        document.getElementById('formAvatarPreview').src = base64Image;
-        // Lưu chuỗi base64 vào ô ẩn để submit
-        document.getElementById('staffAvatar').value = base64Image;
-        showToast('Photo loaded successfully!');
+        if (type === 'avatar') {
+          document.getElementById('formAvatarPreview').src = base64Image;
+          document.getElementById('staffAvatar').value = base64Image;
+          showToast('Photo loaded successfully!');
+        } else if (type === 'zelleQr') {
+          document.getElementById('staffZelleQr').value = base64Image;
+          document.getElementById('txtZelleQrStatus').textContent = 'QR Code attached!';
+          document.getElementById('txtZelleQrStatus').style.color = '#7414ca';
+          showToast('Zelle QR code attached!');
+        } else if (type === 'venmoQr') {
+          document.getElementById('staffVenmoQr').value = base64Image;
+          document.getElementById('txtVenmoQrStatus').textContent = 'QR Code attached!';
+          document.getElementById('txtVenmoQrStatus').style.color = '#008CFF';
+          showToast('Venmo QR code attached!');
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -1132,7 +1231,9 @@
           name: t.name,
           role: t.role,
           zelle: t.zelle,
+          zelleQr: t.zelleQr || '',
           venmo: t.venmo,
+          venmoQr: t.venmoQr || '',
           avatar: t.avatar
         };
       });
@@ -1155,6 +1256,26 @@
 
       document.getElementById('dispZelleId').textContent = currentSelectedTech.zelle;
       document.getElementById('dispVenmoId').textContent = currentSelectedTech.venmo ? `@${currentSelectedTech.venmo}` : 'N/A';
+
+      // Zelle QR Image Display
+      const zelleQrBox = document.getElementById('boxZelleQr');
+      const zelleQrImg = document.getElementById('imgZelleQr');
+      if (currentSelectedTech.zelleQr) {
+        zelleQrImg.src = currentSelectedTech.zelleQr;
+        zelleQrBox.style.display = 'inline-block';
+      } else {
+        zelleQrBox.style.display = 'none';
+      }
+
+      // Venmo QR Image Display
+      const venmoQrBox = document.getElementById('boxVenmoQr');
+      const venmoQrImg = document.getElementById('imgVenmoQr');
+      if (currentSelectedTech.venmoQr) {
+        venmoQrImg.src = currentSelectedTech.venmoQr;
+        venmoQrBox.style.display = 'inline-block';
+      } else {
+        venmoQrBox.style.display = 'none';
+      }
 
       if (currentSelectedTech.venmo) {
         document.getElementById('linkVenmoApp').href = `https://venmo.com/${currentSelectedTech.venmo.replace('@','')}`;
@@ -1217,6 +1338,14 @@
       const defaultImg = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150';
       document.getElementById('formAvatarPreview').src = defaultImg;
       document.getElementById('staffAvatar').value = defaultImg;
+      
+      document.getElementById('staffZelleQr').value = '';
+      document.getElementById('txtZelleQrStatus').textContent = 'No QR uploaded';
+      document.getElementById('txtZelleQrStatus').style.color = 'var(--text-muted)';
+
+      document.getElementById('staffVenmoQr').value = '';
+      document.getElementById('txtVenmoQrStatus').textContent = 'No QR uploaded';
+      document.getElementById('txtVenmoQrStatus').style.color = 'var(--text-muted)';
 
       document.getElementById('staffFormModal').classList.add('active');
     }
@@ -1231,14 +1360,16 @@
       const name = document.getElementById('staffName').value.trim();
       const role = document.getElementById('staffRole').value.trim();
       const zelle = document.getElementById('staffZelle').value.trim();
+      const zelleQr = document.getElementById('staffZelleQr').value.trim();
       const venmo = document.getElementById('staffVenmo').value.trim().replace('@', '');
+      const venmoQr = document.getElementById('staffVenmoQr').value.trim();
       const avatar = document.getElementById('staffAvatar').value.trim();
 
       if (id) {
         // Edit existing
         const index = technicians.findIndex(t => t.id === id);
         if (index !== -1) {
-          technicians[index] = { id, name, role, zelle, venmo, avatar: avatar || technicians[index].avatar };
+          technicians[index] = { id, name, role, zelle, zelleQr, venmo, venmoQr, avatar: avatar || technicians[index].avatar };
         }
       } else {
         // Add new
@@ -1247,7 +1378,9 @@
           name,
           role,
           zelle,
+          zelleQr,
           venmo,
+          venmoQr,
           avatar: avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'
         };
         technicians.push(newTech);
@@ -1265,11 +1398,29 @@
       document.getElementById('staffName').value = tech.name;
       document.getElementById('staffRole').value = tech.role;
       document.getElementById('staffZelle').value = tech.zelle;
+      document.getElementById('staffZelleQr').value = tech.zelleQr || '';
       document.getElementById('staffVenmo').value = tech.venmo;
+      document.getElementById('staffVenmoQr').value = tech.venmoQr || '';
       document.getElementById('staffAvatar').value = tech.avatar || '';
       
       const imgPreviewSrc = tech.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150';
       document.getElementById('formAvatarPreview').src = imgPreviewSrc;
+
+      if (tech.zelleQr) {
+        document.getElementById('txtZelleQrStatus').textContent = 'QR Code attached!';
+        document.getElementById('txtZelleQrStatus').style.color = '#7414ca';
+      } else {
+        document.getElementById('txtZelleQrStatus').textContent = 'No QR uploaded';
+        document.getElementById('txtZelleQrStatus').style.color = 'var(--text-muted)';
+      }
+
+      if (tech.venmoQr) {
+        document.getElementById('txtVenmoQrStatus').textContent = 'QR Code attached!';
+        document.getElementById('txtVenmoQrStatus').style.color = '#008CFF';
+      } else {
+        document.getElementById('txtVenmoQrStatus').textContent = 'No QR uploaded';
+        document.getElementById('txtVenmoQrStatus').style.color = 'var(--text-muted)';
+      }
 
       document.getElementById('staffFormTitle').textContent = 'Edit Technician';
       document.getElementById('staffFormModal').classList.add('active');
